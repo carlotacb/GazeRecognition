@@ -48,7 +48,7 @@ TIPS:
 
 	- Calcular la matriu de confusió
 
-	- Descriptors de la mateixa longitud
+	- Descriptors de la mateixa longitud (Centro BoundaryBox - Centroid)
 
 	- Com que no tenim una base de dades extensa, el que fem és: Tenir la nostra base de dades i amb el 90% de les imatges aprenem, i anem fent un promig dels resultats, i tindrem una millor predicció
 
@@ -65,3 +65,5 @@ TIPS:
 	- Li passem al predictor una imatge i ens retorna si hi han ulls o no i si estàn mirant a la camara o no -> Són bastant baixos els que miren (80%)
 
 	- La part de les celles no aporta informació, hem de retallar els ulls.
+
+	- Classificador te un X (doubles) i una Y (1 i -1) han de ser enters. 
