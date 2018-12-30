@@ -1,53 +1,67 @@
- Apunts de clase: (Coses que s’han de fer al short project) 
+Apunts per ShortProject (Detecció de mirades):
 
-Detecció de mirades
+Per detectar els ulls (els dos): Veure que l'iris tingui forma rodona i no eliptica.
 
-1) Detectar els ulls (els dos) -> Veure que l'iris tingui forma rodona i no eliptica
+-------
 
-A la carpeta d'VC tenim 1500 imatges de gent davant d'una camara, que estan o no mirant a la càmera.
+DataSet:
 
-BioID_XXXX.pgm
+	- Es troba a la carpeta d'VC, tenim 1500 imatges de gent devant d'una camara, que estan o no mirant a la càmera (BioID_XXXX.pgm).
 
-el primer punt és generar un predictor, que ens digui si son ulls o no i després un altre que ens digui si està mirant o no
+	- Per cada imatge tenim un fitxer .eye on tenim la posició dels ulls. 
 
-Per cada imatge tenim un fitxer .eye on tenim la posició dels ulls. 
+	- Tenim un document "miram.xsl" que té informació de si les imatges estan mirant o no a la càmera, feta a partir de la clasificació manual dels alumnes.
 
-matriu observació:
+	- Per generar imatges de no ulls, agafem parts de les imatges que ja tenim on no estiguin els ulls.
+
+-------
+
+Pasos:
+
+1) Generar un predictor que ens digui si son ulls o no.
+
+2) Generar un predictor que ens digui si està mirant o no.
+
+3) Utilitzar el codi HOG (millor codi propi que el ja existent) i també un d'elecció particular.
+
+4) Fer servir característiques invariants a la longitud.
+
+5) Fer una estadística de la nostra perdicció creant la matriu de confusió (10% reservat i 90% aprendre).
+
+6) Fer el Ratio d'Exit de HOG i el Ratio d'exit del nostre altre algorisme.
+
+-------
+
+Matriu observació:
     
 1500    x1 .... xn → 1 (si es ull)
-    …
-    x1 .... xn → 1
+    	... 
+    	x1 .... xn → 1
 
 10K    x1 .... xn → -1 (no es ull)
 
-hem de fer servir característiques obligatoriament HOG i després una altre a elecció particular (codi propi millor que algo ja fet).
+-------
 
-I hem de fer una estadística de la nostre predicció 10% reservat i 90% aprendre… (MATRIU DE CONFUSIÓ)
+TIPS:
 
-Ratio èxit HOG i Ratio èxit nostre
+	- Fer 2 predictors -> li passem ulls i no ulls
 
-Tenim un document "miram.xsl" que té informació de si les imatges estan mirant o no a la càmera, feta a partir de la clasificació manual dels alumnes.
+	- Calcular la matriu de confusió
 
-Per generar imatges de no ulls, agafem parts de les imatges que ja tenim on no estiguin els ulls.
+	- Descriptors de la mateixa longitud
 
+	- Com que no tenim una base de dades extensa, el que fem és: Tenir la nostra base de dades i amb el 90% de les imatges aprenem, i anem fent un promig dels resultats, i tindrem una millor predicció
 
+	- Resize i crop a mida multiple de 8 per que vagi millor a HOG
 
-Fer 2 predictors -> li passem ulls i no ulls
-Calcular la matriu de confusió
-Descriptors de la mateixa longitud
-Com que no tenim una base de dades extensa, el que fem és: Tenir la nostra base de dades i amb el 90% de les imatges aprenem, i anem fent un promig dels resultats, i tindrem una millor predicció
+	- Distancia ulls +25% per costat~
 
-Resize i crop a mida multiple de 8 per que vagi millor a HOG
-Distancia ulls +25% per costat~
+	- (10 vegades) K-FOLD CROSS VALIDATIONS
 
-(10 vegades) K-FOLD CROSS VALIDATIONS
+	- FER UN SCRIPT que crei un predictor, retorni aquest predictor (Funció de MatLab: fitcsvm)
 
-FER UN SCRIPT que crei un predictor, retorni aquest predictor
-Funció de matlab -> svmfit (o algo així)
+	- Avalauem el predictor amb la base de dades d’imatges i ens diu que tal va (hauríem d’arribar al 97%) --> Això ho fem K vegades (K-FOLD VALIDATION)
+	
+	- Li passem al predictor una imatge i ens retorna si hi han ulls o no i si estàn mirant a la camara o no -> Són bastant baixos els que miren (80%)
 
-Avalauem el predictor amb la base de dades d’imatges i ens diu que tal va (hauríem d’arribar al 97%)
-    Això ho fem K vegades (K-FOLD VALIDATION)
-
-Li passem al predictor una imatge i ens retorna si hi han ulls o no i si estàn mirant a la camara o no -> Són bastant baixos els que miren (80%)
-
-La part de les celles no aporta informació, hem de retallar els ulls.
+	- La part de les celles no aporta informació, hem de retallar els ulls.
