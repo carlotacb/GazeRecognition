@@ -6,7 +6,6 @@ h2 = [-1;0;1];
 
 %ndg = double(rgb2gray(I));
 ndg = double(I);
-ndg = imresize(ndg,[288 384]); %escalar a una mida multiple de 8
 
 Hgrad = imfilter(ndg,h); %contorns horitzontals
 Vgrad = imfilter(ndg,h2); %contorns verticals
@@ -16,7 +15,6 @@ D = Vgrad./Hgrad;
 D(isnan(D))=0;
 ANG = atand(D); %angle of each gradient vector
 ANG = mod(ANG,180);
-
 [F, C] = size(ndg);
 cellH = 8;cellW = 8;
 HOGs = cell((F/8),(C/8)); % matrix of histos of bins of pixels
