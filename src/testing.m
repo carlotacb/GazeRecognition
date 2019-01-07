@@ -8,19 +8,15 @@ function [prediction] = testing()
     features = extractHOGFeatures(firstImatge,'CellSize',cellSize);
     hogFeatureSize = length(features);
     matSize = length(Data.testingEyes)+length(Data.testingNotEyes);
-    matSize
-    %testingFeatures = zeros(matSize, hogFeatureSize, 'single');
+    testingFeatures = zeros(matSize, hogFeatureSize, 'single');
         
     for i = 1:matSize
         if (i <= length(Data.testingEyes)) 
             ulls = Data.testingEyes(:,:,i);
-            i
             testingFeatures(i,:) = extractHOGFeatures(ulls, 'CellSize', cellSize);
         else 
             noUlls = Data.testingNotEyes(:,:,i-length(Data.testingEyes));
-            i-length(Data.testingEyes)
-            hola = "segon for"
-            testingFeatures(i-length(Data.testingEyes),:) = extractHOGFeatures(noUlls, 'CellSize', cellSize);
+            testingFeatures(i,:) = extractHOGFeatures(noUlls, 'CellSize', cellSize);
         end
 
     end
