@@ -11,7 +11,7 @@ eyeStrips = zeros([32,128,1521]);
 eyeCoords = zeros(1,4,1521);
 
 %llegir les posicions
-searchfolder = 'C:\Users\carlo\Documents\UNI\11quatri\SProject2\data\originalDataset';
+searchfolder = 'data\originalDataset';
 eyeLocs = dir(fullfile(searchfolder, '*.eye'));
 peopleImages = dir(fullfile(searchfolder, 'BioID*.pgm'));
 
@@ -73,8 +73,8 @@ testingEyes = eyeStrips(:,:,nEyes*0.9+1:end);
 testingNotEyes = notEyes(:,:,nNotEyes*0.9+1:end); 
 
 %save to file
-save('C:\Users\carlo\Documents\UNI\11quatri\SProject2\data\TrainData.mat', 'trainingEyes','trainingNotEyes');
-save('C:\Users\carlo\Documents\UNI\11quatri\SProject2\data\TestData.mat', 'testingEyes','testingNotEyes');
+save('data\TrainData.mat', 'trainingEyes','trainingNotEyes');
+save('data\TestData.mat', 'testingEyes','testingNotEyes');
 
 end
 
