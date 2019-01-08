@@ -1,31 +1,28 @@
-function [trainingLabels] = training()
+function [] = training()
 
-    Data = load('C:\Users\carlo\Documents\UNI\11quatri\SProject2\data\TrainData.mat');
+    Data = load('C:\Users\catot\Documents\Personal\SPV2\data\TrainData.mat');
     
-    firstImatge = Data.trainingEyes(:,:,1);
-    cellSize = [8 8];
-    features = extractHOGFeatures(firstImatge,'CellSize',cellSize);
-    hogFeatureSize = length(features);
-    matSize = length(Data.testingEyes)+length(Data.testingNotEyes);
-
-    trainingFeatures = zeros(matSize, hogFeatureSize, 'single');
-    % Marquem amb 1 si es ull y amb 0 si no es ull.
-    trainingLabels = zeros(matSize, 1);
+    % Marcarem amb un 1 les imatges que contenen ulls i amb un 0 les que no.
+    
+    %firstImatge = Data.trainingEyes(:,:,1);
+    %features = extractHOGFeatures(firstImatge,'CellSize',[8 8]);
+    %Features(1,:) = features;
+    %Labels(1,1) = 1;
         
-    for i = 1:matSize
+    for i = 1:length(Data.trainingEyes)+length(Data.trainingNotEyes)
         if (i <= length(Data.trainingEyes))
             ulls = Data.trainingEyes(:,:,i);
-            trainingFeatures(i,:) = extractHOGFeatures(ulls, 'CellSize', cellSize);
-            trainingLabels(i,1) = 1;
+            Features(i,:) = extractHOGFeatures(ulls, 'CellSize', [8 8]);
+            Labels(i,1) = 1;
         else
             noUlls = Data.trainingNotEyes(:,:,i-length(Data.trainingEyes));
-            trainingFeatures(i,:) = extractHOGFeatures(noUlls, 'CellSize', cellSize);
-            trainingLabels(i,1) = 0;
+            Features(i,:) = extractHOGFeatures(noUlls, 'CellSize', [8 8]);
+            Labels(i,1) = 0;
         end 
     end
     
-    eyeClassifier = fitcsvm(trainingFeatures, trainingLabels);    
+    eyeClassifier = fitcsvm(Features, Labels);    
     
-    save('C:\Users\carlo\Documents\UNI\11quatri\SProject2\data\eyeClassifier.mat', 'eyeClassifier');
+    save('C:\Users\catot\Documents\Personal\SPV2\data\eyeClassifier.mat', 'eyeClassifier');
 end
 

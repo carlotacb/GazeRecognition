@@ -1,27 +1,30 @@
 function [prediction] = testing()
 
-    Data = load('C:\Users\carlo\Documents\UNI\11quatri\SProject2\data\TestData.mat');
-    classifier = load('C:\Users\carlo\Documents\UNI\11quatri\SProject2\data\eyeClassifier.mat');
+    Data = load('C:\Users\catot\Documents\Personal\SPV2\data\TestData.mat');
+    classifier = load('C:\Users\catot\Documents\Personal\SPV2\data\eyeClassifier.mat');
     
-    firstImatge = Data.testingEyes(:,:,1);
-    cellSize = [8 8];
-    features = extractHOGFeatures(firstImatge,'CellSize',cellSize);
-    hogFeatureSize = length(features);
-    matSize = length(Data.testingEyes)+length(Data.testingNotEyes);
-    testingFeatures = zeros(matSize, hogFeatureSize, 'single');
+    %firstImatge = Data.testingEyes(:,:,1);
+    %features = extractHOGFeatures(firstImatge,'CellSize',[8 8]);
+    %Features(1,:) = features;
+    %expected(1,1) = 1;
         
-    for i = 1:matSize
+    for i = 1:length(Data.testingEyes)+length(Data.testingNotEyes)
         if (i <= length(Data.testingEyes)) 
             ulls = Data.testingEyes(:,:,i);
-            testingFeatures(i,:) = extractHOGFeatures(ulls, 'CellSize', cellSize);
+            Features(i,:) = extractHOGFeatures(ulls, 'CellSize', [8 8]);
+            expected(i,1) = 1;
         else 
             noUlls = Data.testingNotEyes(:,:,i-length(Data.testingEyes));
-            testingFeatures(i,:) = extractHOGFeatures(noUlls, 'CellSize', cellSize);
+            Features(i,:) = extractHOGFeatures(noUlls, 'CellSize', [8 8]);
+            expected(i,1) = 0;
         end
 
     end
     
-    prediction = predict(classifier.eyeClassifier, testingFeatures);
+    prediction = predict(classifier.eyeClassifier, Features);
     
+    result = transpose(prediction);
+    cmatrix = confusionmat(expected, result);
+    cchart = confusionchart(expected, result);
 end
 
