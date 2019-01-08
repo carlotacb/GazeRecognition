@@ -1,4 +1,4 @@
-function [normHOGs] = getHOG(I)
+function [HOGdescriptor] = getHOG(I)
 % INPUT IS AN IMAGE (MUST HAVE ROWS AND COLUMNS BE MULTIPLES OF 8, OTHERWISE IT WILL BE SCALED)
 % OUTPUT IS A HOG DESCRIPTOR
 h = [-1 0 1];
@@ -77,6 +77,6 @@ for i = 1:n-1
 end
 
 %FINALLY: THE DESCRIPTOR OF THE IMAGE IS THE NORMALIZED HISTOGRAM MATRIX
-%normHOGs. 
+HOGdescriptor = cell2mat(normHOGs);
 end
 
