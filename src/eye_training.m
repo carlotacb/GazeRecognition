@@ -6,13 +6,13 @@ function [] = eye_training()
     for i = 1:length(Data.trainingEyes)+length(Data.trainingNotEyes)
         if (i <= length(Data.trainingEyes))
             ulls = Data.trainingEyes(:,:,i);
-            Features(i,:) = extractHOGFeatures(ulls, 'CellSize', [8 8]);
-            %Features(i,:,:) = getHOG(ulls);
+            %Features(i,:) = extractHOGFeatures(ulls, 'CellSize', [8 8]);
+            Features(i,:) = single(getHOG(ulls));
             Labels(i,1) = 1;
         else
             noUlls = Data.trainingNotEyes(:,:,i-length(Data.trainingEyes));
-            Features(i,:) = extractHOGFeatures(noUlls, 'CellSize', [8 8]);
-            %Features(i,:,:) = getHOG(noUlls);
+            %Features(i,:) = extractHOGFeatures(noUlls, 'CellSize', [8 8]);
+            Features(i,:) = single(getHOG(noUlls));
             Labels(i,1) = 0;
         end 
     end

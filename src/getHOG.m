@@ -16,11 +16,12 @@ D(isnan(D))=0;
 ANG = atand(D); %angle of each gradient vector
 ANG = mod(ANG,180);
 [F, C] = size(ndg);
-cellH = 8;cellW = 8;
+cellH = 8;
+cellW = 8;
 HOGs = cell((F/8),(C/8)); % matrix of histos of bins of pixels
 for i = 1:(F/8)
     for j = 1:(C/8)
-        HOGs{i,j} = zeros(1,9); %bins of 20 deg ranges
+        HOGs{i,j} = zeros(1,9,'single'); %bins of 20 deg ranges
     end
 end
 %calculate vale of each cell: histogram of gradients of pixels
@@ -65,7 +66,7 @@ end
 normHOGs = cell(n-1,m-1); % matrix of normalized blocks of hists
 for i = 1:n-1
     for j = 1:m-1
-        normHOGs{i,j} = zeros(1,36); %bins of 20 deg ranges
+        normHOGs{i,j} = zeros(1, 36, 'single'); %bins of 20 deg ranges
     end
 end
 
@@ -77,6 +78,7 @@ for i = 1:n-1
 end
 
 %FINALLY: THE DESCRIPTOR OF THE IMAGE IS THE NORMALIZED HISTOGRAM MATRIX
-HOGdescriptor = cell2mat(normHOGs);
+HOGdescriptor = single(cell2mat(normHOGs));
+HOGdescriptor = transpose(HOGdescriptor(:));
 end
 
