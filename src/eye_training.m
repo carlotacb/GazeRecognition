@@ -1,7 +1,6 @@
 function [] = eye_training()
 
     Data = load('data\TrainData.mat');
-    
     % Marcarem amb un 1 les imatges que contenen ulls i amb un 0 les que no.    
     for i = 1:length(Data.trainingEyes)+length(Data.trainingNotEyes)
         if (i <= length(Data.trainingEyes))

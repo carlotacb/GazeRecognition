@@ -11,13 +11,12 @@ eyeStrips = zeros([32,128,1521]);
 eyeCoords = zeros(1,4,1521);
 
 %llegir les posicions
-searchfolder = 'data\originalDataset';
-eyeLocs = dir(fullfile(searchfolder, '*.eye'));
-peopleImages = dir(fullfile(searchfolder, 'BioID*.pgm'));
+eyeLocs = dir(fullfile('data\originalDataset', '*.eye'));
+peopleImages = dir(fullfile('data\originalDataset', 'BioID*.pgm'));
 
 for idx = 1:numel(eyeLocs)
     fi = eyeLocs(idx);
-    eyeCoordsFile = fopen(strcat(fullfile(searchfolder, fi.name)));
+    eyeCoordsFile = fopen(strcat(fullfile('data\originalDataset', fi.name)));
     textscan(eyeCoordsFile,'%s %s %s %s',1);
     eyeCoords(:,:,idx)= double(cell2mat(textscan(eyeCoordsFile,'%d %d %d %d',1)));
     fclose('all'); 
@@ -30,7 +29,7 @@ clearvars eyeLocs
 %now, from all the images of people, extract only the part with eyes
 
 for i = 1:1521
-    Im = imread(fullfile(searchfolder, peopleImages(i).name));
+    Im = imread(fullfile(peopleImages(i).folder, peopleImages(i).name));
     [F C] = size(Im);
     center1 = eyeCoords(1,1:2,i); %LX LY
     center2 = eyeCoords(1,3:4,i); %RX RY
@@ -47,7 +46,7 @@ end
 
 n = 1521;  %nombre d'imatges d'on agafar samples de no ulls
 for i = 1:n
-    Im = imread(fullfile(searchfolder, peopleImages(i).name));
+    Im = imread(fullfile(peopleImages(i).folder, peopleImages(i).name));
     [F C] = size(Im);
     for j = 1:19
         y = randi(F-32);    %y and x are the upper left coords of the window
@@ -75,6 +74,12 @@ testingNotEyes = notEyes(:,:,nNotEyes*0.9+1:end);
 %save to file
 save('data\TrainData.mat', 'trainingEyes','trainingNotEyes');
 save('data\TestData.mat', 'testingEyes','testingNotEyes');
+
+expectedLabels = xlsread("data\Miram.xlsx", 1, "E5:E1525");
+trainigGLab = expectedLabels(1:length(trainingEyes));
+testingGLab = expectedLabels(length(trainingEyes)+1:end);
+
+save('data\GazeLabelsData.mat', 'trainigGLab','testingGLab')
 
 end
 
