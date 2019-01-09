@@ -1,4 +1,4 @@
-function [] = gaze_testing()
+function [prediction, cmatrix] = gaze_testing()
 
     Data = load('data\TestData.mat');
     classifier = load('data\gazeClassifier.mat');
