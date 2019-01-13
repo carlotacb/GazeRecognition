@@ -5,14 +5,14 @@ classifier = load('data\eyeClassifier.mat');
 
 [F C] = size(I);
 
-for i = 1:2:(F-32)
-    for j = 1:4:(C-128)
+for i = 1:2:(F-31)
+    for j = 1:4:(C-127)
         window = single(getHOG(I(i:i+31,j:j+127)));
         [label,score,cost] = predict(classifier.eyeClassifier, window);
         if(label==1) %eye detected 
-            imshow(I(i:i+31,j:j+127));
+            imshow(I(i:i+31,j:j+127),[]);
             ImOut = insertShape(I,'Rectangle',[j i 128 32]);
-            return
+            return;
         end
         
     end

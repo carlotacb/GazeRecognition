@@ -54,8 +54,8 @@ for i = 1:n
         %ens hem d'assegurar que no agafem del troç amb ulls
         while  (x < eyeCoords(1,1,i) && eyeCoords(1,1,i) < (x+64) || ...
                 (x+64) < eyeCoords(1,3,i) && eyeCoords(1,3,i) < (x+128)) && ...
-               (y < eyeCoords(1,2,i) && eyeCoords(1,2,i) < (y+36) || ...
-                y < eyeCoords(1,4,i) && eyeCoords(1,4,i) < (y+36))
+               (y < eyeCoords(1,2,i) && eyeCoords(1,2,i) < (y+32) || ...
+                y < eyeCoords(1,4,i) && eyeCoords(1,4,i) < (y+32))
             y = randi(F-32);    %y and x are the upper left coords of the window
             x = randi(C-128);
         end
@@ -63,6 +63,9 @@ for i = 1:n
         notEyes(:,:,(i-1)*19+j) = Im(y:y+31,x:x+127);
     end
 end
+%afegir imatges que només tinguin un ull a notEyes?
+
+
 %crear els sets d'imatges de training i de testing
 nEyes = uint32(size(eyeStrips,3))-1;
 nNotEyes = uint32(size(notEyes,3))-1;
