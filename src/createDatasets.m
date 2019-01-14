@@ -34,7 +34,7 @@ for i = 1:2:3041
     [F C] = size(Im);
     center1 = eyeCoords(1,1:2,ind); %LX LY
     center2 = eyeCoords(1,3:4,ind); %RX RY
-    dist = uint32(abs(center2(1)-center1(1))*0.3);
+    dist = uint32(abs(center2(1)-center1(1))*0.325);
     disty = dist/2;
     
     left1 = max(1,center1(1)-dist);
