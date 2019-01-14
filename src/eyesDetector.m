@@ -33,14 +33,16 @@ if(eyesFound==0)
     return
 end
 %point out the best candidates to be eyes in output image
-disp(scores);
-[m,ind] = maxk(scores,2);
-ImOut = insertShape(ImOut,'Rectangle',windows(ind(1),:));
-while(abs(windows(ind(2),1)-windows(ind(1),1)) < 24)   %try not to pick same eye twice
-    scores(ind(2))=[];
-    [m,ind] = maxk(scores,2);
+
+[m,ind1] = max(scores);
+ImOut = insertShape(ImOut,'Rectangle',windows(ind1,:));
+scores(ind1)=[];
+[m,ind2] = max(scores);
+while(abs(windows(ind2,1)-windows(ind1,1)) < 24)   %try not to pick same eye twice
+    scores(ind2)=[];
+    [m,ind2] = max(scores);
 end
-ImOut = insertShape(ImOut,'Rectangle',windows(ind(2),:));
+ImOut = insertShape(ImOut,'Rectangle',windows(ind2,:));
 
 
 
