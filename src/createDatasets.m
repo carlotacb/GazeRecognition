@@ -6,8 +6,8 @@ function [] = createDatasets()
 clc;
 clear;
 
-notEyes = zeros([32,128,1521*19]);
-eyeStrips = zeros([32,128,1521]);
+notEyes = zeros([32,48,1521*19*2]);
+eyeStrips = zeros([32,48,1521*2]);
 eyeCoords = zeros(1,4,1521);
 
 %llegir les posicions
@@ -28,19 +28,28 @@ end
 clearvars eyeLocs
 %now, from all the images of people, extract only the part with eyes
 
-for i = 1:1521
-    Im = imread(fullfile(peopleImages(i).folder, peopleImages(i).name));
+for i = 1:2:3041
+    ind = ceil(i/2);
+    Im = imread(fullfile(peopleImages(ind).folder, peopleImages(ind).name));
     [F C] = size(Im);
-    center1 = eyeCoords(1,1:2,i); %LX LY
-    center2 = eyeCoords(1,3:4,i); %RX RY
+    center1 = eyeCoords(1,1:2,ind); %LX LY
+    center2 = eyeCoords(1,3:4,ind); %RX RY
     dist = uint32(abs(center2(1)-center1(1))*0.3);
     disty = dist/2;
     
-    left = max(1,min(center1(1),center2(1))-dist);
-    right = min(C,max(center1(1),center2(1))+dist);
-    top = max(1, min(center1(2),center2(2)) - disty);
-    bot = min(F, max(center1(2),center2(2)) + disty);
-    eyeStrips(:,:,i) = imresize(Im(top:bot,left:right),[32,128]);
+    left1 = max(1,center1(1)-dist);
+    right1 = min(C,center1(1)+dist);
+    top1 = max(1, center1(2) - disty);
+    bot1 = min(F, center1(2) + disty);
+    
+    left2 = max(1,center2(1)-dist);
+    right2 = min(C,center2(1)+dist);
+    top2 = max(1, center2(2) - disty);
+    bot2 = min(F, center2(2) + disty);
+    
+    
+    eyeStrips(:,:,i) = imresize(Im(top1:bot1,left1:right1),[32,48]);
+    eyeStrips(:,:,i+1) = imresize(Im(top2:bot2,left2:right2),[32,48]);
 end
 %eyeStrips es una array de rectangles que contenen els ulls de cada imatge
 
@@ -48,19 +57,19 @@ n = 1521;  %nombre d'imatges d'on agafar samples de no ulls
 for i = 1:n
     Im = imread(fullfile(peopleImages(i).folder, peopleImages(i).name));
     [F C] = size(Im);
-    for j = 1:19
+    for j = 1:38
         y = randi(F-32);    %y and x are the upper left coords of the window
-        x = randi(C-128);
+        x = randi(C-48);
         %ens hem d'assegurar que no agafem del troç amb ulls
-        while  (x < eyeCoords(1,1,i) && eyeCoords(1,1,i) < (x+64) || ...
-                (x+64) < eyeCoords(1,3,i) && eyeCoords(1,3,i) < (x+128)) && ...
+        while  (x < eyeCoords(1,1,i) && eyeCoords(1,1,i) < (x+48) || ...
+                x < eyeCoords(1,3,i) && eyeCoords(1,3,i) < (x+48)) && ...
                (y < eyeCoords(1,2,i) && eyeCoords(1,2,i) < (y+32) || ...
                 y < eyeCoords(1,4,i) && eyeCoords(1,4,i) < (y+32))
             y = randi(F-32);    %y and x are the upper left coords of the window
             x = randi(C-128);
         end
         %afegir l'imatge a noteyes
-        notEyes(:,:,(i-1)*19+j) = Im(y:y+31,x:x+127);
+        notEyes(:,:,(i-1)*38+j) = Im(y:y+31,x:x+47);
     end
 end
 %afegir imatges que només tinguin un ull a notEyes?
@@ -79,8 +88,8 @@ save('data\TrainData.mat', 'trainingEyes','trainingNotEyes');
 save('data\TestData.mat', 'testingEyes','testingNotEyes');
 
 expectedLabels = xlsread("data\Miram.xlsx", 1, "E5:E1525");
-trainigGLab = expectedLabels(1:length(trainingEyes));
-testingGLab = expectedLabels(length(trainingEyes)+1:end);
+trainigGLab = expectedLabels(1:length(trainingEyes)/2);
+testingGLab = expectedLabels(length(trainingEyes)/2+1:end);
 
 save('data\GazeLabelsData.mat', 'trainigGLab','testingGLab')
 
