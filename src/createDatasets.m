@@ -24,7 +24,7 @@ eyeCoords = zeros(1,4,1521);
 
 %llegir les posicions
 eyeLocs = dir(fullfile('data\originalDataset', '*.eye'));
-peopleImages = dir(fullfile('C:\Users\catot\Documents\Personal\VC\SP12\data\originalDataset', 'BioID*.pgm'));
+peopleImages = dir(fullfile('data\originalDataset', 'BioID*.pgm'));
 
 for idx = 1:numel(eyeLocs)
     fi = eyeLocs(idx);
