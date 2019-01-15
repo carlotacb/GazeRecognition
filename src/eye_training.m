@@ -2,7 +2,7 @@ function [] = eye_training()
 
     Data = load('data\TrainData.mat');
     
-    Labels = [ones(trainigEyesSize,1); zeros(trainigEyesNotSize,1)];     
+    Labels = [ones(length(Data.trainingEyes),1); zeros(length(Data.trainingNotEyes),1)];     
     
     for i = 1:length(Data.trainingEyes)+length(Data.trainingNotEyes)
         if (i <= length(Data.trainingEyes))
