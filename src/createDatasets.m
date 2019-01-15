@@ -6,13 +6,25 @@ function [] = createDatasets()
 clc;
 clear;
 
+if isfile('data\TestData.mat')
+     delete('data\TestData.mat');
+end  
+
+if isfile('data\TrainData.mat')
+     delete('data\TrainData.mat');
+end  
+
+if isfile('data\GazeLabelsData.mat')
+     delete('data\GazeLabelsData.mat');
+end 
+
 notEyes = zeros([32,48,1521*19*2]);
 eyeStrips = zeros([32,48,1521*2]);
 eyeCoords = zeros(1,4,1521);
 
 %llegir les posicions
 eyeLocs = dir(fullfile('data\originalDataset', '*.eye'));
-peopleImages = dir(fullfile('data\originalDataset', 'BioID*.pgm'));
+peopleImages = dir(fullfile('C:\Users\catot\Documents\Personal\VC\SP12\data\originalDataset', 'BioID*.pgm'));
 
 for idx = 1:numel(eyeLocs)
     fi = eyeLocs(idx);
@@ -30,7 +42,7 @@ clearvars eyeLocs
 
 for i = 1:2:3041
     ind = ceil(i/2);
-    Im = imread(fullfile(peopleImages(ind).folder, peopleImages(ind).name));
+    Im = imread(fullfile('data\originalDataset', peopleImages(ind).name));
     [F C] = size(Im);
     center1 = eyeCoords(1,1:2,ind); %LX LY
     center2 = eyeCoords(1,3:4,ind); %RX RY
@@ -88,10 +100,17 @@ save('data\TrainData.mat', 'trainingEyes','trainingNotEyes');
 save('data\TestData.mat', 'testingEyes','testingNotEyes');
 
 expectedLabels = xlsread("data\Miram.xlsx", 1, "E5:E1525");
-trainigGLab = expectedLabels(1:length(trainingEyes)/2);
-testingGLab = expectedLabels(length(trainingEyes)/2+1:end);
+j = 1;
+for i = 1:1521*2
+    if mod(i,2) == 0
+       Labels(i,1) = expectedLabels(j);
+       j = j+1;
+    else
+       Labels(i,1) = expectedLabels(j);
+    end 
+end
 
-save('data\GazeLabelsData.mat', 'trainigGLab','testingGLab')
+save('data\GazeLabelsData.mat', 'Labels')
 
 end
 

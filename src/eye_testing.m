@@ -1,4 +1,4 @@
-function [prediction, cmatrix] = eye_testing()
+function [] = eye_testing()
 
     Data = load('data\TestData.mat');
     classifier = load('data\eyeClassifier.mat');
@@ -20,5 +20,8 @@ function [prediction, cmatrix] = eye_testing()
     
     cmatrix = confusionmat(expected, prediction);
     cchart = confusionchart(expected, prediction);
+    
+    resultatUlls = 100*cmatrix(1,1) / (cmatrix(1,1) + cmatrix(1,2))
+    resultatNoUlls = 100*cmatrix(2,2) / (cmatrix(2,1) + cmatrix(2,2))
 end
 
