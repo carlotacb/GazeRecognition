@@ -1,4 +1,4 @@
-function [] = eyeTesting()
+function [resultatNoUlls, resultatUlls, encert, prediction] = eyeTesting()
 
     Data = load('data\TestData.mat');
     classifier = load('data\eyeClassifier.mat');
@@ -19,10 +19,10 @@ function [] = eyeTesting()
     cmatrix = confusionmat(expected, prediction);
     cchart = confusionchart(expected, prediction);
     
-    resultatNoUlls = 100*cmatrix(1,1) / (cmatrix(1,1) + cmatrix(1,2))
-    resultatUlls = 100*cmatrix(2,2) / (cmatrix(2,1) + cmatrix(2,2))
+    resultatNoUlls = 100*cmatrix(1,1) / (cmatrix(1,1) + cmatrix(1,2));
+    resultatUlls = 100*cmatrix(2,2) / (cmatrix(2,1) + cmatrix(2,2));
     
-    ((resultatUlls*length(Data.testingEyes))+(resultatNoUlls*length(Data.testingNotEyes)))/(length(Data.testingEyes)+length(Data.testingNotEyes))
+    encert = ((resultatUlls*length(Data.testingEyes))+(resultatNoUlls*length(Data.testingNotEyes)))/(length(Data.testingEyes)+length(Data.testingNotEyes));
 end
 
 

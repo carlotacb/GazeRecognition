@@ -47,11 +47,9 @@ ImOut = insertShape(ImOut,'Rectangle',windows(ind2,:));
 
 %detect if eyes are looking towards camera
 
-eye1 = horzcat(single(getHOG(imcrop(I,windows(ind1,:)))), ...
-        extractLBPFeatures(imcrop(I,windows(ind1,:))));
+eye1 = single(getHOG(imcrop(I,windows(ind1,:))));
 
-eye2 = horzcat(single(getHOG(imcrop(I,windows(ind2,:)))),...
-        extractLBPFeatures(imcrop(I,windows(ind2,:))));
+eye2 = single(getHOG(imcrop(I,windows(ind2,:))));
 
 prediction1 = predict(gazeClassifier.gazeClassifier, eye1);
 prediction2 = predict(gazeClassifier.gazeClassifier, eye2);
