@@ -6,16 +6,16 @@ function [] = createDatasets()
 clc;
 clear;
 
-if isfile('data\TestData.mat')
-     delete('data\TestData.mat');
+if isfile('data\testData.mat')
+     delete('data\testData.mat');
 end  
 
-if isfile('data\TrainData.mat')
-     delete('data\TrainData.mat');
+if isfile('data\trainData.mat')
+     delete('data\trainData.mat');
 end  
 
-if isfile('data\GazeLabelsData.mat')
-     delete('data\GazeLabelsData.mat');
+if isfile('data\gazeLabelsData.mat')
+     delete('data\gazeLabelsData.mat');
 end 
 
 notEyes = zeros([32,48,1521*19*2]);
@@ -96,8 +96,8 @@ testingEyes = eyeStrips(:,:,nEyes*0.9+1:end);
 testingNotEyes = notEyes(:,:,nNotEyes*0.9+1:end); 
 
 %save to file
-save('data\TrainData.mat', 'trainingEyes','trainingNotEyes');
-save('data\TestData.mat', 'testingEyes','testingNotEyes');
+save('data\trainData.mat', 'trainingEyes','trainingNotEyes');
+save('data\testData.mat', 'testingEyes','testingNotEyes');
 
 expectedLabels = xlsread("data\Miram.xlsx", 1, "E5:E1525");
 j = 1;
@@ -110,7 +110,7 @@ for i = 1:1521*2
     end 
 end
 
-save('data\GazeLabelsData.mat', 'Labels')
+save('data\gazeLabelsData.mat', 'Labels')
 
 end
 

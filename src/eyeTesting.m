@@ -1,19 +1,17 @@
-function [] = eye_testing()
+function [] = eyeTesting()
 
     Data = load('data\TestData.mat');
     classifier = load('data\eyeClassifier.mat');
             
     for i = 1:length(Data.testingEyes)+length(Data.testingNotEyes)
         if (i <= length(Data.testingEyes)) 
-            ulls = Data.testingEyes(:,:,i);
-            Features(i,:) = single(getHOG(ulls));
+            imatge = Data.testingEyes(:,:,i);
             expected(i,1) = 1;
         else 
-            noUlls = Data.testingNotEyes(:,:,i-length(Data.testingEyes));
-            Features(i,:) = single(getHOG(noUlls));
+            imatge = Data.testingNotEyes(:,:,i-length(Data.testingEyes));
             expected(i,1) = 0;
         end
-
+        Features(i,:) = single(getHOG(imatge));
     end
     
     prediction = predict(classifier.eyeClassifier, Features);
@@ -21,7 +19,11 @@ function [] = eye_testing()
     cmatrix = confusionmat(expected, prediction);
     cchart = confusionchart(expected, prediction);
     
-    resultatUlls = 100*cmatrix(1,1) / (cmatrix(1,1) + cmatrix(1,2))
-    resultatNoUlls = 100*cmatrix(2,2) / (cmatrix(2,1) + cmatrix(2,2))
+    resultatNoUlls = 100*cmatrix(1,1) / (cmatrix(1,1) + cmatrix(1,2))
+    resultatUlls = 100*cmatrix(2,2) / (cmatrix(2,1) + cmatrix(2,2))
+    
+    ((resultatUlls*length(Data.testingEyes))+(resultatNoUlls*length(Data.testingNotEyes)))/(length(Data.testingEyes)+length(Data.testingNotEyes))
 end
 
+
+     

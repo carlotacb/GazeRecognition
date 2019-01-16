@@ -1,4 +1,4 @@
-function [] = gaze_training()
+function [] = gazeTraining()
 
     if isfile('data\gazeClassifier.mat')
         delete('data\gazeClassifier.mat');
@@ -8,10 +8,8 @@ function [] = gaze_training()
     Data2 = load('data\GazeLabelsData.mat'); 
 
     hog = getHOG(Data.trainingEyes(:,:,1));
-    featureLBP = extractLBPFeatures(Data.trainingEyes(:,:,1));
-    %hist = histogram(Data.trainingEyes(:,:,1),'EdgeColor','k','NumBins',16);
-    %featureshist = single(hist.Values);
-    featureSize = length(hog)+length(featureLBP);
+    %featureLBP = extractLBPFeatures(Data.trainingEyes(:,:,1), 'CellSize', [8 8]);
+    featureSize = length(hog);
 
     trainigEyesSize = length(Data.trainingEyes);
     Features = zeros(trainigEyesSize, featureSize, 'single');
@@ -20,10 +18,9 @@ function [] = gaze_training()
     for i = 1:length(Data.trainingEyes)
         imatge = Data.trainingEyes(:,:,i);
         featureHOG = single(getHOG(imatge));
-        featureLBP = extractLBPFeatures(imatge);
-        %hist = histogram(imatge,'EdgeColor','k','NumBins',16);
-        %featureshist = single(hist.Values);
-        Features(i,:) = horzcat(featureHOG, featureLBP);        
+        %featureLBP = extractLBPFeatures(imatge, 'CellSize', [8 8]);
+        %Features(i,:) = horzcat(featureHOG, featureLBP);  
+        Features(i,:) = featureHOG;
     end    
     
     gazeClassifier = fitcsvm(Features, Labels);    
